@@ -1,0 +1,81 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.view-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    color: white;
+}
+
+.head-container {
+    display: flex;
+    flex-direction: column;
+    height: 15vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.report-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+}   
+
+.header-info {
+    margin-top: 2vh;
+    display: flex;
+    flex-direction: flex;
+}
+
+.h3-i {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-left: 2.5vw;
+    margin-right: 2.5vw;
+}
+
+.line {
+    height: 2px;
+    background-color: white;
+}
+
+.body-container {
+    margin-top: 5vh;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.body-section {
+    height: 20vh;
+    margin-bottom: 5vh;
+    text-align: center;
+    align-items: center;
+    /* background-color: rgba(65, 65, 65, 0.308);
+    border: 2px solid rgba(255, 255, 255, 0.089);
+    border-radius: 15px;
+    padding: 1em; */
+    width: 100vw;
+}
+
+.h1 {
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+}

@@ -49,7 +49,6 @@ function Profile() {
 
     const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedGender = event.target.nextElementSibling?.getAttribute('data-txt');
-        console.log(selectedGender);
         setUserGender(selectedGender || "");
     };
 
