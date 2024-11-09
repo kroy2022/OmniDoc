@@ -62,7 +62,6 @@ function Dashboard() {
         return decrypted.toString(CryptoES.enc.Utf8);
     }
 
-
     return (
         //Change background color to red yellow or green based on severity
         <div className='dashboard-container'>
