@@ -40,6 +40,8 @@ function Login() {
     if (response.data.status == 200) {
       const encryptedEmail = encrypt(email);
       navigate(`/dashboard/${encryptedEmail}`)
+    }else{
+    alert("Invalid Username"); 
     }
   }
 
