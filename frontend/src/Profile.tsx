@@ -1,14 +1,15 @@
 import './Profile.css';
-import { useState, useEffect, SetStateAction } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation  } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './components/Navbar';
+import { LoadProfileResponse } from './interfaces/ApiResponse';
 
 function Profile() {    
     const location = useLocation();
     const email = location.state.email;
     const name = location.state.name;
-    const [medicalHistory, setMedicalHistory] = useState(["Cold", "Flu", "Etc"]);
+    const [medicalHistory, setMedicalHistory] = useState<{"index": number,"item": string}[]>([]);
     const [userGender, setUserGender] = useState<string>("Male");
     const [birthday, setBirthday] = useState<string>('2000-01-01');
     const [medicalHistoryItem, setMedicalHistoryItem] = useState<string>('');
@@ -17,8 +18,28 @@ function Profile() {
 
     useEffect(() => {
         //load info from database and fill forms
-        
+        const fd = new FormData();
+        console.log(email);
+        fd.append("email", email);
+        axios.post('http://127.0.0.1:5000/get/profile', fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          })
+          .then(response => loadProfileData(response))
+          .catch(error => console.log(error))
     }, [])
+
+    const loadProfileData = (response: LoadProfileResponse) => {
+        console.log("LOAD PROFILE RESPONSE: ", response);
+        if (response.data.status == 200) {
+            setUserGender(response.data.profile.Gender);
+            setBirthday(response.data.profile.DOB);
+            setAlcoholIsChecked(response.data.profile.Alcohol);
+            setSmokingIsChecked(response.data.profile.Smoke);
+            setMedicalHistory(response.data.profile.History);
+        }
+    }
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key == "Enter") {
@@ -37,17 +58,46 @@ function Profile() {
     }
 
     const addMedicalHistoryItem = () => {
-        //add item to db
-        let tempHistory = [...medicalHistory, medicalHistoryItem];
-        console.log("TEMP HISTORY: ", tempHistory);
-        setMedicalHistory(tempHistory);
-        setMedicalHistoryItem('');
+        const fd = new FormData();
+        fd.append("user_id", email);
+        fd.append("update_type", "add");
+        fd.append("item", medicalHistoryItem);
+        axios.post('http://127.0.0.1:5000/update/medical/item', fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          })
+          .then((response) => {
+            console.log("add item", response);
+            if (response.data.status == 200) {
+                let tempHistory = [...medicalHistory, {"item": medicalHistoryItem, "index": response.data.id}];
+                console.log("TEMP HISTORY: ", tempHistory);
+                setMedicalHistory(tempHistory);
+                setMedicalHistoryItem('');
+            }
+          })
+          .catch(error => console.log(error))
     }
 
     //add db index to remove from db
     const removeItem = (index: number, dbIndex: number = 0) => {
-        const temp = medicalHistory.filter((_, i) => i !== index);
-        setMedicalHistory(temp);
+        const fd = new FormData();
+        fd.append("user_id", email);
+        fd.append("update_type", "delete");
+        fd.append("id", dbIndex.toString());
+        axios.post('http://127.0.0.1:5000/update/medical/item', fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+            })
+            .then((response) => {
+                console.log("delete item response: ", response);
+                if (response.data.status == 200) {
+                    const temp = medicalHistory.filter((_, i) => i !== index);
+                    setMedicalHistory(temp);
+                }
+            })
+            .catch(error => console.log(error))
     } 
 
     const handleAlcoholChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,9 +141,9 @@ function Profile() {
                     </div>
                     <div className='section'>
                         <h3 className='profile-desc'>Medical History</h3>
-                        {medicalHistory.map((item, index) => (
+                        {medicalHistory && medicalHistory.map((medicalItem, index) => (
                             <div className='point'>
-                                <h3 className='p' onClick={() => removeItem(index)}>- {item}</h3>
+                                <h3 className='p' onClick={() => removeItem(index, medicalItem.index)}>- {medicalItem.item}</h3>
                             </div>
                         ))}
                         <input className='input' placeholder='Add medical history' value={medicalHistoryItem} onChange={handleMedicalHistoryItemAddition} onKeyDown={handleKeyPress}/>
