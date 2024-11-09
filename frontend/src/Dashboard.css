@@ -1,0 +1,74 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.dashboard-container {
+    background-color: black;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.h {
+    margin-top: 1vh;
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.reports-container {
+    width: 75vw;
+}
+
+.report {
+    margin-top: 2.5vh;
+    width: 75vw;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: flex;
+    justify-content: space-between;
+    background-color: rgba(65, 65, 65, 0.308);
+    border: 2px solid rgba(255, 255, 255, 0.089);
+    padding: 2rem;
+    position: relative; /* Make sure to position relative or absolute */
+    left: 0; /* Initial position */
+    transition: left 0.3s ease; /* Transition for left */
+}
+
+.report:hover {
+    cursor: pointer !important;
+    background-color: rgba(255, 255, 255, 0.286);  
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+}
+
+.report-h {
+    font-size: 2rem;
+    color: white;
+    font-weight: 600;
+}
+
+.symptoms {
+    display: flex;
+    flex-direction: flex;
+}
+
+.report-p {
+    margin-right: 1rem;
+    font-size: 1rem;
+    color: white;
+    font-weight: 300;
+}

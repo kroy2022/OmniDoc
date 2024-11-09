@@ -1,0 +1,97 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-container {
+  width: 98vw;
+  height: 100vh;
+  display: flex;
+}
+
+.left-side-container {
+  width: 50vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-h {
+  font-size: 3rem;
+}
+
+.login-div {
+  background-color: #6C63FF;
+  height: 50vh;
+  width: 40vw;
+  border-radius: 25px;
+  flex-direction: column;
+}
+
+.google-section {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 10vh;
+}
+
+.google-btn {
+  width: 20vw;
+  height: 5vh;
+  border-radius: 25px;
+  border: none;
+  background-color: white;
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  height: 30vh;  
+}
+
+.input-login,
+.input-password {
+  margin: 3vh;
+  height: 5vh;
+  border-radius: 10px;
+  border: none;
+}
+
+.btn-section {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 5vh;
+}
+
+.login-btn {
+  height: 5vh;
+  width: 15vw;
+  border-radius: 15px;
+  border: none;
+}
+
+.login-btn:hover {
+  background-color: #AFB3FF;
+  cursor: pointer;
+}
+
+.right-side-container {
+  width: 48vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: #AFB3FF;
+}
+
+.medicine-img {
+  width: 40vw;
+}
