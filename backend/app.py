@@ -20,7 +20,6 @@ def login():
         get_user = request.form.get("email")
         print("recieved mail", get_user)
         response = supabase.table("Users").select("User_ID").eq("User_ID", get_user).execute()
-        print("response", response)
         if not get_user or not response.data:
             return jsonify({
                 "status": 400,
@@ -41,6 +40,7 @@ def login():
         
 
     except Exception as e:
+        print(str(e))
         return jsonify({
             "status": 500,
             "error": str(e)
@@ -125,4 +125,39 @@ def update_medical_item():
             return jsonify({
                 "status": 500,
             })
+
+@app.route('/update/drug/item', methods=["POST"])
+@csrf.exempt
+def update_alc_item():
+    user_id = request.form.get("user_id")
+    drug_type = request.form.get("drug_type")
+    is_checked = request.form.get("is_checked")
+    is_true =  jsonify({"status": 200})
+    is_false = jsonify({"status": 500,})
+    print(drug_type)
+    if drug_type == "alc":
+        if is_checked == 'true':
+            return is_true
+        else:
+            return is_false
+    else:
+        if is_checked == 'true':
+            return is_true
+        else:
+            return is_false
+        
+@app.route('/update/gender/item', methods=["POST"])
+@csrf.exempt
+def update_gender_item():
+    user_id = request.form.get("user_id")
+    gender_type = request.form.get("gender_type")
+    selected_gender = request.form.get("selected_gender")
+    print(selected_gender)
+
+@app.route('/update/bday/item', methods=["POST"])
+@csrf.exempt
+def update_bday_item():
+    user_id = request.form.get("user_id")
+    bday_type = request.form.get("bday_type")
+    
 

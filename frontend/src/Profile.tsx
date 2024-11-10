@@ -49,8 +49,41 @@ function Profile() {
 
     const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedGender = event.target.nextElementSibling?.getAttribute('data-txt');
-        console.log(selectedGender);
-        setUserGender(selectedGender || "");
+        const fd = new FormData();
+        fd.append("user_id", email);
+        fd.append("update_type", "add");
+        fd.append("selected_gender",  selectedGender?.toString() || "Male");
+        axios.post('http://127.0.0.1:5000/update/gender/item', fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          })
+          .then((response) => {
+            console.log("add item", response);
+            if (response.data.status == 200) {
+                setUserGender(selectedGender || "");
+            }
+          })
+          .catch(error => console.log(error))
+    };
+
+    const changeBirthdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const fd = new FormData();
+        fd.append("user_id", email);
+        fd.append("update_type", "add");   
+        fd.append("item",  event.target.checked.toString()); 
+        axios.post('http://127.0.0.1:5000/update/bday/item', fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          })
+          .then((response) => {
+            console.log("add item", response);
+            if (response.data.status == 200) {
+                setBirthday(event.target.value);
+            }
+          })
+          .catch(error => console.log(error))
     };
 
     const handleMedicalHistoryItemAddition = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,11 +134,41 @@ function Profile() {
     } 
 
     const handleAlcoholChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAlcoholIsChecked(event.target.checked);
+        const fd = new FormData();
+        fd.append("user_id", email);
+        fd.append("drug_type", "alc")
+        fd.append("is_checked", event.target.checked.toString());
+        axios.post('http://127.0.0.1:5000/update/drug/item', fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+            })
+            .then((response) => {
+                console.log("delete item response: ", response);
+                if (response.data.status == 200) {
+                    setAlcoholIsChecked(event.target.checked);
+                }
+            })
+            .catch(error => console.log(error))
     }
 
     const handleSmokingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSmokingIsChecked(event.target.checked);
+        const fd = new FormData();
+        fd.append("user_id", email);
+        fd.append("drug_type", "smoking")
+        fd.append("is_checked", event.target.checked.toString());
+        axios.post('http://127.0.0.1:5000/update/drug/item', fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+            })
+            .then((response) => {
+                console.log("delete item response: ", response);
+                if (response.data.status == 200) {
+                    setSmokingIsChecked(event.target.checked);
+                }
+            })
+            .catch(error => console.log(error))
     }
 
     return (
@@ -137,7 +200,7 @@ function Profile() {
                     </div>
                     <div className='section'>
                         <h3 className='profile-desc'>Birthdate</h3>
-                        <input type='date' placeholder='Enter your birthday' className='birthday' value={birthday} onChange={(event) => setBirthday(event.target.value)}/>
+                        <input type='date' placeholder='Enter your birthday' className='birthday' value={birthday} onChange={changeBirthdate}/>
                     </div>
                     <div className='section'>
                         <h3 className='profile-desc'>Medical History</h3>
