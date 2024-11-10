@@ -42,10 +42,9 @@ function Dashboard() {
         }
     ]);    
     const key = "doc"
-    console.log("in dashboard");
 
     useEffect(() => {
-        console.log("IN DASHBOARD");
+        console.log("IN DASHBOARD", protectedEmail);
         if (protectedEmail) {
             console.log("ENCRYPT EMAIL: ", protectedEmail);
             setEmail(decrypt(protectedEmail));
@@ -76,7 +75,7 @@ function Dashboard() {
         //Change background color to red yellow or green based on severity
         <div className='dashboard-container'>
             <Navbar name={name} email={email} selectedSection="dashboard"/>
-            <h1 className='h'>Welcome {name}</h1>
+            <h1 className='h'>Welcome {email}</h1>
             <div className='reports-container'>
                 {reports.map((report, index) => (
                     <div className='report' onClick={() => navigateToReport()}>

@@ -9,7 +9,7 @@ function ViewReport() {
     const data = location.state;
     const email = data.email;
     const name = data.name;
-    const [medicalHistory, setMedicalHistory] = useState([]);
+    const [medicalHistory, setMedicalHistory] = useState<{"index": number,"item": string}[]>([]);
     const tempHistory = [
         {
             "index": 1,
