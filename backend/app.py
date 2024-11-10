@@ -62,17 +62,8 @@ def get_profile_info():
         profile_info_response = supabase.table("Users").select('"Is_Doctor", "DOB", "Gender", "Alcohol", "Smoke"').eq("User_ID", user_id).execute()
         profile_info = profile_info_response.data
 
-        history_info_response = supabase.table("Medical_History").select('"Medical_History_ID", "Medical_History_Item"').eq("User_ID", user_id).execute()
-        history_info = history_info_response.data
-
         profile = profile_info[0]
-
-        profile["History"] = []
-        for item in history_info:
-            profile["History"].append({
-                "index": item["Medical_History_ID"],
-                "item": item["Medical_History_Item"]
-            })
+        profile["History"] = get_medical_history(user_id)
 
         return jsonify({
             "status": 200,
@@ -84,7 +75,7 @@ def get_profile_info():
             "status": 500,
             "message": str(e)
         })
-
+    
 @app.route('/update/medical/item', methods=["POST"])
 @csrf.exempt
 def update_medical_item():
@@ -125,6 +116,36 @@ def update_medical_item():
             return jsonify({
                 "status": 500,
             })
+
+@app.route('/get/medical/history', methods=["POST"])
+@csrf.exempt
+def api_get_medical_history():
+    user_id = request.form.get("user_id")
+    history = get_medical_history(user_id)
+
+    return jsonify({
+        "status": 200,
+        "history": history
+    })
+
+
+def get_medical_history(user_id):
+    try:
+        print(user_id)
+        history_info_response = supabase.table("Medical_History").select('"Medical_History_ID", "Medical_History_Item"').eq("User_ID", user_id).execute()
+        history_info = history_info_response.data
+        print("HISTORY INFO: ", history_info_response)
+        history = []
+        for item in history_info:
+            history.append({
+                "index": item["Medical_History_ID"],
+                "item": item["Medical_History_Item"]
+            })
+        
+        return history
+    except Exception as e:
+        print(str(e))
+        return []
 
 @app.route('/update/drug/item', methods=["POST"])
 @csrf.exempt

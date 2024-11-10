@@ -6,6 +6,7 @@ import Login from './Login.tsx';
 import Dashboard from './Dashboard.tsx';
 import MedicalReport from './MedicalReport.tsx';
 import Profile from './Profile.tsx';
+import ViewReport from './ViewReport.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/dashboard/:protectedEmail?" element={<Dashboard />}/>
         <Route path="/medical/report" element={<MedicalReport />}/>
         <Route path="/profile" element={<Profile />}/>
+        <Route path="/ViewReport" element={<ViewReport />}/>
       </Routes>
     </Router>
   </StrictMode>,

@@ -23,7 +23,6 @@ function Navbar({name, email, selectedSection}: NavbarProps) {
             const encryptedEmail = encrypt(url);
             url = `/dashboard/${encryptedEmail}`;
         }
-        console.log(urlInformation);
         navigate(url, {
             state: urlInformation
         })

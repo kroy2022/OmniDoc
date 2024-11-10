@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 
 function Dashboard() {
     const { protectedEmail } = useParams<{protectedEmail: string}>();
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
     const [name, setName] = useState<string>('kevin');
     const [reports, setReports] = useState([
@@ -41,10 +42,9 @@ function Dashboard() {
         }
     ]);    
     const key = "doc"
-    console.log("in dashboard");
 
     useEffect(() => {
-        console.log("IN DASHBOARD");
+        console.log("IN DASHBOARD", protectedEmail);
         if (protectedEmail) {
             console.log("ENCRYPT EMAIL: ", protectedEmail);
             setEmail(decrypt(protectedEmail));
@@ -62,14 +62,23 @@ function Dashboard() {
         return decrypted.toString(CryptoES.enc.Utf8);
     }
 
+    const navigateToReport = () => {
+        navigate("/ViewReport", {
+            state: {
+                email: email,
+                name: name,
+            }
+        });
+    }
+
     return (
         //Change background color to red yellow or green based on severity
         <div className='dashboard-container'>
             <Navbar name={name} email={email} selectedSection="dashboard"/>
-            <h1 className='h'>Welcome {name}</h1>
+            <h1 className='h'>Welcome {email}</h1>
             <div className='reports-container'>
                 {reports.map((report, index) => (
-                    <div className='report'>
+                    <div className='report' onClick={() => navigateToReport()}>
                         <div className='left'>
                             <h1 className='report-h'>Report ID: {report.report_id}</h1>
                             <div className='symptoms'>
