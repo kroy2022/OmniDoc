@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect 
 from create_pdf import make_pdf
+from datetime import datetime
 from keys import OPENAI_KEY, SUPABASE_KEY, SUPABASE_URL
 import os, time
 from supabase import create_client, Client
@@ -310,6 +311,7 @@ def login():
         
 
     except Exception as e:
+        print(str(e))
         return jsonify({
             "status": 500,
             "error": str(e)
@@ -445,3 +447,77 @@ def get_medical_history(user_id):
     except Exception as e:
         print(str(e))
         return []
+
+@app.route('/update/drug/item', methods=["POST"])
+@csrf.exempt
+def update_alc_item():
+    user_id = request.form.get("user_id")
+    drug_type = request.form.get("drug_type")
+    is_checked = request.form.get("is_checked")
+    print("IS CHECKED: ", is_checked)
+    try:
+        if drug_type == "alc":
+            if is_checked == 'true':
+                supabase.table("Users").update({"Alcohol": True}).eq("User_ID", user_id).execute() #double check idk
+            else:
+                supabase.table("Users").update({"Alcohol": False}).eq("User_ID", user_id).execute()
+        else:
+            if is_checked == 'true':
+                supabase.table("Users").update({"Smoke": True}).eq("User_ID", user_id).execute()
+            else:
+                supabase.table("Users").update({"Smoke": False}).eq("User_ID", user_id).execute()
+
+        return jsonify({
+            "status": 200
+        })
+
+    except Exception as e:
+        print(str(e))
+        return jsonify({
+            "status": 500,
+            "message": str(e)
+     })
+    
+        
+@app.route('/update/gender/item', methods=["POST"])
+@csrf.exempt
+def update_gender_item():
+    user_id = request.form.get("user_id")
+    gender_type = request.form.get("gender_type")
+    selected_gender = request.form.get("selected_gender")
+
+
+    try:    
+        response = supabase.table("Users").update({"Gender": selected_gender}).eq("User_ID", user_id).execute()
+
+        return jsonify({
+            "status": 200
+    })
+
+    except Exception as e:
+        print(str(e))
+        return jsonify({
+            "status": 500,
+            "message": str(e)
+        })
+
+@app.route('/update/bday', methods=["POST"])
+@csrf.exempt
+def update_bday_item():
+    user_id = request.form.get("user_id")
+    date = request.form.get("date")
+
+    try:    
+        response = supabase.table("Users").update({"DOB": date}).eq("User_ID", user_id).execute()
+
+        return jsonify({
+            "status": 200
+        })
+
+    except Exception as e:
+        print(str(e))
+        return jsonify({
+            "status": 500,
+            "message": str(e)
+        })
+
