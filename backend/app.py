@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect 
 from create_pdf import make_pdf
+from datetime import datetime
 import requests, json
 from keys import SUPABASE_KEY, SUPABASE_URL
 import os
@@ -131,10 +132,8 @@ def api_get_medical_history():
 
 def get_medical_history(user_id):
     try:
-        print(user_id)
         history_info_response = supabase.table("Medical_History").select('"Medical_History_ID", "Medical_History_Item"').eq("User_ID", user_id).execute()
         history_info = history_info_response.data
-        print("HISTORY INFO: ", history_info_response)
         history = []
         for item in history_info:
             history.append({
@@ -153,19 +152,30 @@ def update_alc_item():
     user_id = request.form.get("user_id")
     drug_type = request.form.get("drug_type")
     is_checked = request.form.get("is_checked")
-    is_true =  jsonify({"status": 200})
-    is_false = jsonify({"status": 500,})
-    print(drug_type)
-    if drug_type == "alc":
-        if is_checked == 'true':
-            return is_true
+    print("IS CHECKED: ", is_checked)
+    try:
+        if drug_type == "alc":
+            if is_checked == 'true':
+                supabase.table("Users").update({"Alcohol": True}).eq("User_ID", user_id).execute() #double check idk
+            else:
+                supabase.table("Users").update({"Alcohol": False}).eq("User_ID", user_id).execute()
         else:
-            return is_false
-    else:
-        if is_checked == 'true':
-            return is_true
-        else:
-            return is_false
+            if is_checked == 'true':
+                supabase.table("Users").update({"Smoke": True}).eq("User_ID", user_id).execute()
+            else:
+                supabase.table("Users").update({"Smoke": False}).eq("User_ID", user_id).execute()
+
+        return jsonify({
+            "status": 200
+        })
+
+    except Exception as e:
+        print(str(e))
+        return jsonify({
+            "status": 500,
+            "message": str(e)
+     })
+    
         
 @app.route('/update/gender/item', methods=["POST"])
 @csrf.exempt
@@ -173,12 +183,39 @@ def update_gender_item():
     user_id = request.form.get("user_id")
     gender_type = request.form.get("gender_type")
     selected_gender = request.form.get("selected_gender")
-    print(selected_gender)
 
-@app.route('/update/bday/item', methods=["POST"])
+
+    try:    
+        response = supabase.table("Users").update({"Gender": selected_gender}).eq("User_ID", user_id).execute()
+
+        return jsonify({
+            "status": 200
+    })
+
+    except Exception as e:
+        print(str(e))
+        return jsonify({
+            "status": 500,
+            "message": str(e)
+        })
+
+@app.route('/update/bday', methods=["POST"])
 @csrf.exempt
 def update_bday_item():
     user_id = request.form.get("user_id")
-    bday_type = request.form.get("bday_type")
-    
+    date = request.form.get("date")
+
+    try:    
+        response = supabase.table("Users").update({"DOB": date}).eq("User_ID", user_id).execute()
+
+        return jsonify({
+            "status": 200
+        })
+
+    except Exception as e:
+        print(str(e))
+        return jsonify({
+            "status": 500,
+            "message": str(e)
+        })
 
