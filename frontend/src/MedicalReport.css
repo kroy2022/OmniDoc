@@ -128,12 +128,7 @@ html, body {
 }
 
 .view-report-btn {
-    margin-top: 15vh;
-    border: none;
-    border-radius: 15px;
-    padding: 1em;
-    width: 10vw;
-    background-color: blue;
+    margin-top: 10vh;
     color: white;
 }
 

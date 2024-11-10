@@ -25,3 +25,20 @@ export interface LoadProfileResponse {
         }
     }
 }
+
+export interface Report {
+    Report_ID: string;
+    User_ID: string;
+    Date: string;
+    Time: string;
+    Recommended_Action: string;
+    Severity: string;
+    Symptoms: string;
+  }
+  
+  export interface LoadDashboardResponse {
+    data: {
+      status: number;
+      reports: Report[]; 
+    };
+  }

@@ -83,16 +83,14 @@ def query_db(symptoms, namespace="medical_symptoms"):
     )
 
     # create an array of all matches 
-    medical_analysis = []
+    medical_analysis = ""
     for illness in query_result["matches"]:
         var = illness["id"]
         for item in symptom_data:
             if item["index"] == var:
-                medical_analysis.append(item["description"])
+                medical_analysis += item["description"]
 
-    for item in medical_analysis:
-        print(item)
-
+    print(medical_analysis)
     return medical_analysis
 
 
